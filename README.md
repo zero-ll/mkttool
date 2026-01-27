@@ -1,16 +1,157 @@
-# React + Vite
+# 红人搜索系统 V2
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> 为营销团队提供高效的红人发现、评估和管理工具
 
-Currently, two official plugins are available:
+## 📋 项目简介
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+红人搜索系统是一个专业的 YouTube 红人搜索和管理平台，支持多项目隔离、基于关键词和红人ID的多维度搜索，帮助品牌快速找到匹配的 KOL/KOC。
 
-## React Compiler
+### 核心功能
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- 🎯 **精准搜索** - 支持关键词搜索和红人ID批量搜索
+- 📊 **数据分析** - 多维度筛选和排序，智能评分系统
+- 🔄 **任务管理** - 任务化管理搜索流程，避免重复工作
+- 🤝 **建联管理** - 统一管理已联系/合作的红人
+- 🏢 **多项目支持** - 支持多个项目独立管理，数据隔离
 
-## Expanding the ESLint configuration
+## 🎨 技术栈
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **前端框架**: React 18
+- **构建工具**: Vite
+- **路由**: React Router v6
+- **状态管理**: Context API
+- **样式**: Tailwind CSS + 自定义 CSS
+- **图标**: Lucide React
+- **设计风格**: Light Neumorphism + Soft Glassmorphism
+
+## 🚀 快速开始
+
+### 环境要求
+
+- Node.js >= 16.0.0
+- npm >= 8.0.0
+
+### 安装依赖
+
+```bash
+npm install
+```
+
+### 启动开发服务器
+
+```bash
+npm run dev
+```
+
+访问 `http://localhost:5173` 查看应用
+
+### 构建生产版本
+
+```bash
+npm run build
+```
+
+## 📁 项目结构
+
+```
+红人搜索 V2/
+├── src/
+│   ├── components/          # 可复用组件
+│   │   ├── Layout.jsx       # 主布局
+│   │   ├── TaskCard.jsx     # 任务卡片
+│   │   ├── InfluencerCard.jsx  # 红人卡片
+│   │   └── ...
+│   ├── pages/               # 页面组件
+│   │   ├── SearchTasks.jsx  # 搜索任务列表
+│   │   ├── CreateTask.jsx   # 创建任务
+│   │   ├── TaskDetails.jsx  # 任务详情
+│   │   └── Connections.jsx  # 建联管理
+│   ├── context/             # Context 状态管理
+│   │   └── AppContext.jsx
+│   ├── App.jsx              # 应用入口
+│   ├── index.css            # 全局样式
+│   └── main.jsx             # 主入口
+├── public/                  # 静态资源
+├── PRD.md                   # 产品需求文档
+├── API_SPEC.md              # 接口需求文档
+└── package.json
+```
+
+## 📖 文档
+
+- [产品需求文档 (PRD)](./PRD.md) - 详细的功能说明和设计规范
+- [接口需求文档 (API)](./API_SPEC.md) - 完整的后端接口定义
+- [旧版后端技术方案](./OLD_BACKEND_SPEC.md) - 历史参考文档
+
+## ✨ 主要特性
+
+### 1. 搜索任务管理
+- 支持关键词搜索和红人ID搜索两种方式
+- 分步骤表单，清晰的任务创建流程
+- 完善的表单验证，确保数据完整性
+- 任务列表支持搜索、重命名、删除
+
+### 2. 搜索结果展示
+- 多维度筛选（粉丝量级、国家、类型等）
+- 灵活的排序选项
+- 自定义列显示
+- 批量操作和导出功能
+
+### 3. 建联管理
+- 统一管理已收藏的红人
+- 多条件筛选和搜索
+- 导出建联数据
+
+### 4. UI/UX 设计
+- Light Neumorphism 设计风格
+- 柔和的双重阴影系统
+- 玻璃态材质效果
+- 流畅的动画和过渡
+- 全面的中文化界面
+
+## 🔄 版本历史
+
+### v2.1 (2026-01-27)
+- ✅ 完善任务列表页（新增查看参数按钮、双入口跳转）
+- ✅ 添加表单验证（Step 1 和 Step 3 必填字段）
+- ✅ 简化建联页面（删除批量邮件功能）
+- ✅ 全局中文化（所有界面文字）
+- ✅ UI/UX 升级（Light Neumorphism 设计）
+
+### v2.0 (2026-01-26)
+- ✅ 初始版本
+- ✅ 基础搜索功能
+- ✅ 任务管理
+- ✅ 建联管理
+
+## 📝 开发规范
+
+### 代码风格
+- 使用 ES6+ 语法
+- 组件使用函数式组件 + Hooks
+- 遵循 React 最佳实践
+
+### 提交规范
+- feat: 新功能
+- fix: 修复bug
+- docs: 文档更新
+- style: 代码格式调整
+- refactor: 重构
+- test: 测试相关
+- chore: 构建/工具相关
+
+## 🤝 贡献指南
+
+欢迎提交 Issue 和 Pull Request！
+
+## 📄 许可证
+
+MIT License
+
+## 👥 联系方式
+
+如有问题或建议，请联系项目维护者。
+
+---
+
+**注意**: 本项目为内部使用工具，请勿在未经授权的情况下分享或传播。
