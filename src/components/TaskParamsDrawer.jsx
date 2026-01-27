@@ -244,8 +244,8 @@ const ParamItem = ({ label, value, isTags, isBoolean }) => (
     <div className="flex items-start py-2">
         <span className="text-sm text-slate-500 w-40 flex-shrink-0">{label}</span>
         <span className={`text-sm flex-1 ${isBoolean
-                ? (value === '是' ? 'text-green-600 font-medium' : 'text-slate-400')
-                : 'text-slate-900'
+            ? (value === '是' ? 'text-green-600 font-medium' : 'text-slate-400')
+            : 'text-slate-900'
             }`}>
             {isTags && value !== '-' ? (
                 <div className="flex flex-wrap gap-1.5">
