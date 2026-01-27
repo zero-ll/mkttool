@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown, Check, Plus } from 'lucide-react';
 
-const ProjectSelector = ({ currentProject, projects, onProjectChange, onCreateProject }) => {
+const ProjectSelector = ({ currentProject, projects, onProjectChange, onCreateProject, disabled }) => {
     const [isOpen, setIsOpen] = useState(false);
     const containerRef = useRef(null);
 
@@ -19,13 +19,14 @@ const ProjectSelector = ({ currentProject, projects, onProjectChange, onCreatePr
         <div className="relative" ref={containerRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center gap-2 px-4 py-2.5 bg-white border border-border-subtle rounded-xl hover:bg-gray-50/50 hover:border-border transition-all shadow-sm hover:shadow"
+                disabled={disabled}
+                className={`flex items-center gap-2 px-4 py-2.5 bg-white border border-border-subtle rounded-xl transition-all shadow-sm w-full justify-between ${disabled ? 'opacity-50 cursor-not-allowed bg-gray-50' : 'hover:bg-gray-50/50 hover:border-border hover:shadow'}`}
             >
-                <div className="flex items-center gap-2">
-                    <div className="w-2.5 h-2.5 rounded-full bg-primary ring-2 ring-primary/20"></div>
-                    <span className="text-sm font-bold text-text-primary">{currentProject?.name || 'Select Project'}</span>
+                <div className="flex items-center gap-2 overflow-hidden">
+                    <div className="w-2.5 h-2.5 rounded-full bg-primary ring-2 ring-primary/20 shrink-0"></div>
+                    <span className="text-sm font-bold text-text-primary truncate">{currentProject?.name || 'Select Project'}</span>
                 </div>
-                <ChevronDown size={16} className={`text-text-tertiary transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+                {!disabled && <ChevronDown size={16} className={`text-text-tertiary transition-transform duration-200 shrink-0 ${isOpen ? 'rotate-180' : ''}`} />}
             </button>
 
             {isOpen && (

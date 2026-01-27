@@ -128,20 +128,12 @@ const InfluencerBatchViewModal = ({
                             </div>
 
                             <div className="flex items-center gap-3">
-                                {/* 邮箱显示位置优化 */}
-                                {currentInfluencer.email && (
-                                    <div className="hidden md:flex flex-col items-end pr-3 border-r border-border mr-1 text-right">
-                                        <span className="text-[8px] font-black text-text-tertiary uppercase tracking-tighter">Email</span>
-                                        <a href={`mailto:${currentInfluencer.email}`} className="text-[11px] font-black text-primary hover:underline">
-                                            {currentInfluencer.email}
-                                        </a>
-                                    </div>
-                                )}
+
 
                                 <button onClick={() => onConnect(currentInfluencer)}
                                     className={`px-5 py-2.5 rounded-full font-bold text-[11px] flex items-center gap-1.5 transition-all ${isConnected
-                                            ? 'bg-gradient-to-r from-emerald-50 to-emerald-100 text-emerald-600 border border-emerald-200 shadow-sm'
-                                            : 'neu-btn-primary text-xs'
+                                        ? 'bg-gradient-to-r from-emerald-50 to-emerald-100 text-emerald-600 border border-emerald-200 shadow-sm'
+                                        : 'neu-btn-primary text-xs'
                                         }`}>
                                     <Heart size={14} className={isConnected ? "fill-current" : ""} />
                                     {isConnected ? '已收藏' : '收藏建联'}

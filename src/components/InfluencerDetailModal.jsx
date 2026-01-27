@@ -57,15 +57,7 @@ const InfluencerDetailModal = ({ isOpen, onClose, influencer, onConnect, isConne
                         </div>
                     </div>
                     <div className="flex items-center gap-4">
-                        {/* 邮箱移动到按钮左边 */}
-                        {influencer.email && (
-                            <div className="hidden md:flex flex-col items-end pr-4 border-r border-border mr-2">
-                                <span className="text-[10px] font-bold text-text-tertiary uppercase tracking-wider">Email Contact</span>
-                                <a href={`mailto:${influencer.email}`} className="text-sm font-bold text-primary hover:underline">
-                                    {influencer.email}
-                                </a>
-                            </div>
-                        )}
+
 
                         <button
                             onClick={() => onConnect(influencer)}

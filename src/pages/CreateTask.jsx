@@ -86,6 +86,19 @@ const CreateTask = () => {
                     return;
                 }
             } else {
+                // ID Search Step 2 Validation
+                if (idForm.industryKeywords.length === 0) {
+                    alert('行业关键词为必填项');
+                    return;
+                }
+                if (idForm.brandKeywords.length === 0) {
+                    alert('本品关键词为必填项');
+                    return;
+                }
+                if (idForm.competitorKeywords.length === 0) {
+                    alert('竞品关键词为必填项');
+                    return;
+                }
                 if (idForm.targetCountries.length === 0) {
                     alert('请选择目标国家');
                     return;
@@ -142,6 +155,12 @@ const CreateTask = () => {
                 return;
             }
 
+            // Validate Step 3 for Keyword Search (since submit can happen here directly)
+            if (keywordForm.p0Types.length === 0) {
+                alert('P0 频道类型为必填项，请至少添加一个类型');
+                return;
+            }
+
             // Validate Min Subscribers
             if (keywordForm.minSubscribers && parseInt(keywordForm.minSubscribers) < 100) {
                 alert('最小粉丝数不能小于 100');
@@ -163,6 +182,12 @@ const CreateTask = () => {
                 searchMethod: '红人ID搜索',
                 details: { ...idForm }
             };
+
+            // Validate Step 3 for ID Search
+            if (idForm.p0Types.length === 0) {
+                alert('P0 频道类型为必填项，请至少添加一个类型');
+                return;
+            }
         }
 
         createTask(newTaskData);
@@ -500,12 +525,12 @@ const CreateTask = () => {
                                 <div className="space-y-6 max-w-2xl mx-auto animate-fade-in">
                                     <div>
                                         <label className="block text-sm font-bold text-slate-700 mb-2">
-                                            Task Name <span className="text-red-500">*</span>
+                                            任务名称 <span className="text-red-500">*</span>
                                         </label>
                                         <input
                                             required
                                             type="text"
-                                            placeholder="e.g. Competitor Analysis Q3"
+                                            placeholder="例如：2024 夏季竞品分析"
                                             className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-100 focus:border-orange-500 transition-all font-medium"
                                             value={idForm.name}
                                             onChange={(e) => setIdForm({ ...idForm, name: e.target.value })}
@@ -514,14 +539,14 @@ const CreateTask = () => {
 
                                     <div>
                                         <label className="block text-sm font-bold text-slate-700 mb-2">
-                                            Upload List <span className="text-red-500">*</span>
+                                            上传列表 <span className="text-red-500">*</span>
                                         </label>
                                         <div className="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:border-orange-400 hover:bg-orange-50/10 transition-colors cursor-pointer group">
                                             <div className="w-12 h-12 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
                                                 <Upload size={24} />
                                             </div>
-                                            <p className="text-sm font-medium text-slate-900 mb-1">Click to upload or drag and drop</p>
-                                            <p className="text-xs text-slate-500">Excel or CSV files only</p>
+                                            <p className="text-sm font-medium text-slate-900 mb-1">点击上传或拖拽文件</p>
+                                            <p className="text-xs text-slate-500">仅支持 Excel 或 CSV 文件</p>
                                             <input type="file" className="hidden" accept=".xlsx,.xls,.csv" />
                                         </div>
                                     </div>
@@ -533,29 +558,29 @@ const CreateTask = () => {
                                 <div className="space-y-6 max-w-2xl mx-auto animate-fade-in">
                                     <div className="grid grid-cols-3 gap-4">
                                         <TagInput
-                                            label="Industry Keywords"
-                                            placeholder="Press enter..."
+                                            label="行业关键词"
+                                            placeholder="按回车确认..."
                                             value={idForm.industryKeywords}
                                             onChange={(val) => setIdForm({ ...idForm, industryKeywords: val })}
                                         />
                                         <TagInput
-                                            label="Brand Keywords"
-                                            placeholder="Press enter..."
+                                            label="本品关键词"
+                                            placeholder="按回车确认..."
                                             value={idForm.brandKeywords}
                                             onChange={(val) => setIdForm({ ...idForm, brandKeywords: val })}
                                         />
                                         <TagInput
-                                            label="Competitor Keywords"
-                                            placeholder="Press enter..."
+                                            label="竞品关键词"
+                                            placeholder="按回车确认..."
                                             value={idForm.competitorKeywords}
                                             onChange={(val) => setIdForm({ ...idForm, competitorKeywords: val })}
                                         />
                                     </div>
 
                                     <MultiSelect
-                                        label="Country Preference"
+                                        label="目标国家"
                                         required
-                                        placeholder="Search countries..."
+                                        placeholder="选择国家..."
                                         value={idForm.targetCountries}
                                         onChange={(val) => setIdForm({ ...idForm, targetCountries: val })}
                                     />
@@ -569,8 +594,8 @@ const CreateTask = () => {
                                                 onChange={(e) => setIdForm({ ...idForm, excludeSearched: e.target.checked })}
                                             />
                                             <div>
-                                                <span className="text-sm font-medium text-slate-700">Exclude previously searched influencers</span>
-                                                <p className="text-xs text-slate-500 mt-0.5">Won't show influencers from other tasks</p>
+                                                <span className="text-sm font-medium text-slate-700">排除已搜索过的红人</span>
+                                                <p className="text-xs text-slate-500 mt-0.5">不显示其他任务中已出现的红人</p>
                                             </div>
                                         </label>
                                         <label className="flex items-start gap-3 cursor-pointer group">
@@ -581,8 +606,8 @@ const CreateTask = () => {
                                                 onChange={(e) => setIdForm({ ...idForm, excludeDeduplicated: e.target.checked })}
                                             />
                                             <div>
-                                                <span className="text-sm font-medium text-slate-700">Exclude deduplicated influencers</span>
-                                                <p className="text-xs text-slate-500 mt-0.5">Won't show influencers from exclusion list</p>
+                                                <span className="text-sm font-medium text-slate-700">排除去重的红人</span>
+                                                <p className="text-xs text-slate-500 mt-0.5">避免从全局排除列表中出现红人</p>
                                             </div>
                                         </label>
                                     </div>
@@ -593,25 +618,25 @@ const CreateTask = () => {
                             {currentStep === 3 && (
                                 <div className="space-y-6 max-w-2xl mx-auto animate-fade-in">
                                     <div className="text-center mb-8">
-                                        <h3 className="text-lg font-bold text-slate-900">Target Influencer Profile</h3>
-                                        <p className="text-sm text-slate-500 mt-1">Define your ideal influencer types (optional)</p>
+                                        <h3 className="text-lg font-bold text-slate-900">目标红人画像</h3>
+                                        <p className="text-sm text-slate-500 mt-1">定义理想的红人类型(可选)</p>
                                     </div>
 
                                     <TagInput
-                                        label="P0 Channel Types (Priority)"
-                                        placeholder="e.g. Tech Reviews, Gadget Unboxing..."
+                                        label="P0 频道类型 (优先)"
+                                        placeholder="例如：科技评测, 开箱视频..."
                                         value={idForm.p0Types}
                                         onChange={(val) => setIdForm({ ...idForm, p0Types: val })}
                                     />
                                     <TagInput
-                                        label="P1 Channel Types (Secondary)"
-                                        placeholder="e.g. Lifestyle, DIY..."
+                                        label="P1 频道类型 (次要)"
+                                        placeholder="例如：生活方式, DIY..."
                                         value={idForm.p1Types}
                                         onChange={(val) => setIdForm({ ...idForm, p1Types: val })}
                                     />
                                     <TagInput
-                                        label="P2 Channel Types (Acceptable)"
-                                        placeholder="e.g. General Tech, News..."
+                                        label="P2 频道类型 (可接受)"
+                                        placeholder="例如：通用科技, 新闻..."
                                         value={idForm.p2Types}
                                         onChange={(val) => setIdForm({ ...idForm, p2Types: val })}
                                     />

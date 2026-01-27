@@ -24,10 +24,11 @@ const MultiSelect = ({ value = [], onChange, label, placeholder, required, optio
     }, []);
 
     const toggleOption = (option) => {
-        if (value.includes(option)) {
-            onChange(value.filter(item => item !== option));
+        const optionValue = typeof option === 'object' ? option.value : option;
+        if (value.includes(optionValue)) {
+            onChange(value.filter(item => item !== optionValue));
         } else {
-            onChange([...value, option]);
+            onChange([...value, optionValue]);
         }
     };
 
@@ -51,19 +52,25 @@ const MultiSelect = ({ value = [], onChange, label, placeholder, required, optio
 
             {isOpen && (
                 <div className="absolute z-10 w-full mt-1 bg-white border border-slate-200 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-                    {availableOptions.map((option) => (
-                        <div
-                            key={option}
-                            onClick={() => toggleOption(option)}
-                            className="flex items-center gap-2 px-4 py-2.5 hover:bg-slate-50 cursor-pointer text-sm text-slate-700"
-                        >
-                            <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${value.includes(option) ? 'bg-indigo-600 border-indigo-600' : 'border-slate-300'
-                                }`}>
-                                {value.includes(option) && <Check size={12} className="text-white" />}
+                    {availableOptions.map((option) => {
+                        const optionValue = typeof option === 'object' ? option.value : option;
+                        const optionLabel = typeof option === 'object' ? option.label : option;
+                        const isSelected = value.includes(optionValue);
+
+                        return (
+                            <div
+                                key={optionValue}
+                                onClick={() => toggleOption(option)}
+                                className="flex items-center gap-2 px-4 py-2.5 hover:bg-slate-50 cursor-pointer text-sm text-slate-700"
+                            >
+                                <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${isSelected ? 'bg-indigo-600 border-indigo-600' : 'border-slate-300'
+                                    }`}>
+                                    {isSelected && <Check size={12} className="text-white" />}
+                                </div>
+                                {optionLabel}
                             </div>
-                            {option}
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             )}
 

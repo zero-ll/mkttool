@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Download, Settings2, Heart, Star, TrendingUp, Eye, Filter, MonitorPlay } from 'lucide-react';
+import { ArrowLeft, Download, Settings2, Heart, Star, TrendingUp, Eye, Filter, MonitorPlay, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import FilterModal from '../components/FilterModal';
 import InfluencerDetailModal from '../components/InfluencerDetailModal';
@@ -66,6 +66,8 @@ const TaskDetails = () => {
     const [showColumnSettings, setShowColumnSettings] = useState(false);
     const [connectedInfluencers, setConnectedInfluencers] = useState(new Set());
     const [filteredData, setFilteredData] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     // Modal States
     const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
@@ -188,6 +190,8 @@ const TaskDetails = () => {
     ];
 
     const displayData = filteredData.length > 0 ? filteredData : influencers;
+    const totalPages = Math.ceil(displayData.length / itemsPerPage);
+    const paginatedData = displayData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
     const handleConnect = (influencer) => {
         const influencerId = typeof influencer === 'string' ? influencer : influencer.id;
@@ -257,66 +261,107 @@ const TaskDetails = () => {
     }
 
     return (
-        <div className="flex h-screen relative overflow-hidden" style={{ background: 'var(--bg-gradient)' }} >
+        <div className="flex h-screen relative overflow-hidden bg-bg-secondary">
             {/* Main Content (Full Width) */}
             < main className="flex-1 flex flex-col overflow-hidden" >
                 {/* Header */}
-                < header className="glass-panel border-b border-white/20 px-8 py-6 backdrop-blur-strong" >
-                    {/* Breadcrumb */}
-                    < button
-                        onClick={() => navigate('/')}
-                        className="flex items-center gap-2 text-text-secondary hover:text-primary transition-colors mb-4 group"
-                    >
-                        <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-                        <span className="text-sm font-bold">返回任务列表</span>
-                    </button >
-
-                    {/* Title & Actions */}
-                    < div className="flex items-center justify-between" >
-                        <div>
-                            <h1 className="text-2xl font-heading font-bold text-text-primary mb-1">{task.name}</h1>
-                            <p className="text-sm text-text-tertiary font-medium">
-                                {task.searchMethod || 'Keyword Search'} · {displayData.length} 个红人
-                            </p>
+                <header className="glass-panel border-b border-white/20 px-8 py-6 backdrop-blur-strong">
+                    <div className="flex flex-col gap-6">
+                        {/* Top Row: Back + Title */}
+                        <div className="flex items-center gap-4">
+                            <button
+                                onClick={() => navigate('/')}
+                                className="p-2 -ml-2 hover:bg-surface-secondary text-text-secondary hover:text-text-primary rounded-full transition-colors group"
+                            >
+                                <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
+                            </button>
+                            <div>
+                                <h1 className="text-2xl font-heading font-bold text-text-primary flex items-center gap-3">
+                                    {task.name}
+                                    <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-surface-secondary text-text-tertiary border border-border">
+                                        {task.searchMethod || 'Keyword Search'}
+                                    </span>
+                                </h1>
+                                <p className="text-xs text-text-tertiary font-bold mt-1 ml-1">
+                                    {displayData.length} Influencers Found
+                                </p>
+                            </div>
                         </div>
 
-                        <div className="flex items-center gap-3 flex-wrap">
-                            {/* 筛选按钮 */}
-                            <button
-                                onClick={() => setIsFilterModalOpen(true)}
-                                className="neu-btn-secondary flex items-center gap-2"
-                            >
-                                <Filter size={18} />
-                                筛选
-                            </button>
+                        {/* Row 2: Target Profiles & Actions */}
+                        <div className="flex flex-col lg:flex-row justify-between items-start gap-6">
+                            {/* Target Profiles - Compact Version */}
+                            <div className="flex flex-wrap items-center gap-x-8 gap-y-3 bg-surface/30 rounded-xl px-5 py-3 border border-white/10 max-w-3xl">
+                                {/* P0 */}
+                                <div className="flex items-center gap-2">
+                                    <span className="shrink-0 px-1.5 py-0.5 rounded text-[10px] font-black bg-primary/10 text-primary border border-primary/20 uppercase tracking-wider">P0</span>
+                                    <div className="flex flex-wrap gap-1.5">
+                                        {((task.details || task.params)?.p0Types || []).length > 0 ? ((task.details || task.params)?.p0Types || []).map(t => (
+                                            <span key={t} className="text-[11px] px-2 py-0.5 rounded-md bg-white border border-white/10 text-text-secondary font-bold shadow-sm">{t}</span>
+                                        )) : <span className="text-xs text-text-tertiary">-</span>}
+                                    </div>
+                                </div>
+                                {/* P1 */}
+                                {((task.details || task.params)?.p1Types || []).length > 0 && (
+                                    <div className="flex items-center gap-2">
+                                        <span className="shrink-0 px-1.5 py-0.5 rounded text-[10px] font-black bg-blue-50 text-blue-600 border border-blue-100 uppercase tracking-wider">P1</span>
+                                        <div className="flex flex-wrap gap-1.5">
+                                            {((task.details || task.params)?.p1Types || []).map(t => (
+                                                <span key={t} className="text-[11px] px-2 py-0.5 rounded-md bg-white border border-white/10 text-text-secondary font-bold shadow-sm">{t}</span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                                {/* P2 */}
+                                {((task.details || task.params)?.p2Types || []).length > 0 && (
+                                    <div className="flex items-center gap-2">
+                                        <span className="shrink-0 px-1.5 py-0.5 rounded text-[10px] font-black bg-gray-50 text-gray-500 border border-gray-200 uppercase tracking-wider">P2</span>
+                                        <div className="flex flex-wrap gap-1.5">
+                                            {((task.details || task.params)?.p2Types || []).map(t => (
+                                                <span key={t} className="text-[11px] px-2 py-0.5 rounded-md bg-white border border-white/10 text-text-secondary font-bold shadow-sm">{t}</span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
 
-                            {/* 详情视图按钮 */}
-                            <button
-                                onClick={() => {
-                                    setBatchViewIndex(0);
-                                    setIsBatchViewOpen(true);
-                                }}
-                                className="neu-btn-secondary flex items-center gap-2"
-                                disabled={displayData.length === 0}
-                            >
-                                <MonitorPlay size={18} />
-                                <span className="hidden sm:inline">详情视图</span>
-                            </button>
+                            {/* Actions - Vertical alignment fix */}
+                            <div className="flex items-center gap-3 flex-wrap lg:pt-1">
+                                <button
+                                    onClick={() => setIsFilterModalOpen(true)}
+                                    className="neu-btn-secondary flex items-center gap-2"
+                                >
+                                    <Filter size={18} />
+                                    筛选
+                                </button>
 
-                            <button
-                                onClick={() => setShowColumnSettings(!showColumnSettings)}
-                                className="hidden md:flex neu-btn-secondary items-center gap-2"
-                            >
-                                <Settings2 size={18} />
-                                列设置
-                            </button>
-                            <button className="neu-btn-primary flex items-center gap-2">
-                                <Download size={18} />
-                                <span className="hidden sm:inline">Export</span>
-                            </button>
+                                <button
+                                    onClick={() => {
+                                        setBatchViewIndex(0);
+                                        setIsBatchViewOpen(true);
+                                    }}
+                                    className="neu-btn-secondary flex items-center gap-2"
+                                    disabled={displayData.length === 0}
+                                >
+                                    <MonitorPlay size={18} />
+                                    <span className="hidden sm:inline">详情视图</span>
+                                </button>
+
+                                <button
+                                    onClick={() => setShowColumnSettings(!showColumnSettings)}
+                                    className="hidden md:flex neu-btn-secondary items-center gap-2"
+                                >
+                                    <Settings2 size={18} />
+                                    列设置
+                                </button>
+                                <button className="neu-btn-primary flex items-center gap-2">
+                                    <Download size={18} />
+                                    <span className="hidden sm:inline">Export</span>
+                                </button>
+                            </div>
                         </div>
-                    </div >
-                </header >
+                    </div>
+                </header>
 
                 {/* Table Container */}
                 < div className="flex-1 overflow-auto p-8" >
@@ -403,7 +448,7 @@ const TaskDetails = () => {
                                             </td>
                                         </tr>
                                     ) : (
-                                        displayData.map((inf) => (
+                                        paginatedData.map((inf) => (
                                             <tr key={inf.id} className="hover:bg-gradient-to-r hover:from-orange-50/30 hover:to-transparent transition-all duration-300 group border-b border-[var(--border-light)] relative">
                                                 {/* Influencer */}
                                                 {visibleColumns.influencer && (
@@ -562,23 +607,66 @@ const TaskDetails = () => {
                     </div>
 
                     {/* Pagination */}
-                    {
-                        displayData.length > 0 && (
-                            <div className="flex items-center justify-between mt-6 px-2">
-                                <p className="text-sm text-text-secondary font-medium">
-                                    Showing {displayData.length} influencers
-                                </p>
-                                <div className="flex gap-2">
-                                    <button className="px-4 py-2 border border-border rounded-lg text-sm font-bold text-text-secondary hover:bg-surface-secondary transition-colors disabled:opacity-50" disabled>
-                                        Previous
-                                    </button>
-                                    <button className="px-4 py-2 border border-border rounded-lg text-sm font-bold text-text-secondary hover:bg-surface-secondary transition-colors disabled:opacity-50" disabled>
-                                        Next
-                                    </button>
+                    {/* Pagination */}
+                    {displayData.length > 0 && (
+                        <div className="flex items-center justify-between mt-6 px-4 py-4 border-t border-border">
+                            <p className="text-sm text-text-secondary font-medium">
+                                Showing <span className="font-bold text-text-primary">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="font-bold text-text-primary">{Math.min(currentPage * itemsPerPage, displayData.length)}</span> of <span className="font-bold text-text-primary">{displayData.length}</span> results
+                            </p>
+
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={() => setCurrentPage(1)}
+                                    disabled={currentPage === 1}
+                                    className="p-2 border border-border rounded-lg bg-surface hover:bg-surface-secondary text-text-secondary disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                                    title="First Page"
+                                >
+                                    <ChevronsLeft size={18} />
+                                </button>
+                                <button
+                                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                    disabled={currentPage === 1}
+                                    className="p-2 border border-border rounded-lg bg-surface hover:bg-surface-secondary text-text-secondary disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                                    title="Previous Page"
+                                >
+                                    <ChevronLeft size={18} />
+                                </button>
+
+                                <div className="flex items-center gap-1 mx-2">
+                                    {Array.from({ length: totalPages }, (_, i) => i + 1)
+                                        .filter(p => p === 1 || p === totalPages || Math.abs(currentPage - p) <= 1)
+                                        .map((page, index, array) => (
+                                            <React.Fragment key={page}>
+                                                {index > 0 && array[index - 1] !== page - 1 && <span className="px-2 text-text-tertiary">...</span>}
+                                                <button
+                                                    onClick={() => setCurrentPage(page)}
+                                                    className={`min-w-[32px] h-8 flex items-center justify-center rounded-lg text-sm font-bold transition-all ${currentPage === page ? 'bg-primary text-white shadow-soft-md' : 'bg-surface border border-border text-text-secondary hover:border-primary/30 hover:text-primary'}`}
+                                                >
+                                                    {page}
+                                                </button>
+                                            </React.Fragment>
+                                        ))}
                                 </div>
+
+                                <button
+                                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                    disabled={currentPage === totalPages}
+                                    className="p-2 border border-border rounded-lg bg-surface hover:bg-surface-secondary text-text-secondary disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                                    title="Next Page"
+                                >
+                                    <ChevronRight size={18} />
+                                </button>
+                                <button
+                                    onClick={() => setCurrentPage(totalPages)}
+                                    disabled={currentPage === totalPages}
+                                    className="p-2 border border-border rounded-lg bg-surface hover:bg-surface-secondary text-text-secondary disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                                    title="Last Page"
+                                >
+                                    <ChevronsRight size={18} />
+                                </button>
                             </div>
-                        )
-                    }
+                        </div>
+                    )}
                 </div >
             </main >
 

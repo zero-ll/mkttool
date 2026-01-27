@@ -62,19 +62,29 @@ const Layout = () => {
                 w-64 fixed h-full bg-surface border-r border-border flex flex-col z-30 transition-transform duration-300 ease-in-out
                 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
             `}>
-                <div className="p-6 flex items-center justify-between">
-                    <h1 className="text-2xl font-heading font-black bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent tracking-tight">
-                        InfluencerHub
-                    </h1>
-                    <button
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="lg:hidden p-2 text-text-tertiary hover:text-text-primary rounded-full hover:bg-surface-secondary"
-                    >
-                        <Settings size={20} /> {/* Using Settings icon as placeholder closer, or just tap outside */}
-                    </button>
+                <div className="p-6">
+                    <div className="flex items-center justify-between mb-6">
+                        <h1 className="text-2xl font-heading font-black bg-gradient-to-r from-primary to-primary-dark bg-clip-text text-transparent tracking-tight">
+                            InfluencerHub
+                        </h1>
+                        <button
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="lg:hidden p-2 text-text-tertiary hover:text-text-primary rounded-full hover:bg-surface-secondary"
+                        >
+                            <Settings size={20} />
+                        </button>
+                    </div>
+
+                    <ProjectSelector
+                        currentProject={currentProject}
+                        projects={projects}
+                        onProjectChange={switchProject}
+                        onCreateProject={() => setShowCreateDialog(true)}
+                        disabled={location.pathname.includes('/create-task')}
+                    />
                 </div>
 
-                <nav className="flex-1 px-4 space-y-2 mt-4">
+                <nav className="flex-1 px-4 space-y-2 mt-2">
                     <SidebarItem to="/" icon={Search} label="搜索任务" />
                     <SidebarItem to="/connect" icon={Users} label="红人建联" />
                 </nav>
@@ -99,37 +109,36 @@ const Layout = () => {
                 <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
                 <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] bg-primary-dark/5 rounded-full blur-[120px] pointer-events-none" />
 
-                {/* Top Header */}
-                <header className="h-20 px-8 flex items-center justify-between sticky top-0 z-10 backdrop-blur-md bg-surface/70 border-b border-border">
-                    <div className="flex items-center gap-4 lg:gap-6">
-                        {/* Mobile Menu Toggle */}
-                        <button
-                            onClick={() => setIsMobileMenuOpen(true)}
-                            className="lg:hidden p-2 -ml-2 text-text-secondary hover:text-primary rounded-lg hover:bg-surface-secondary transition-colors"
-                        >
-                            <Menu size={24} />
-                        </button>
+                {/* Top Header - Hidden on main pages to save space */}
+                {(!location.pathname.startsWith('/task/') &&
+                    location.pathname !== '/' &&
+                    location.pathname !== '/connect' &&
+                    location.pathname !== '/exclusions' &&
+                    location.pathname !== '/create-task') && (
+                        <header className="h-20 px-8 flex items-center justify-between sticky top-0 z-10 backdrop-blur-md bg-surface/70 border-b border-border">
+                            <div className="flex items-center gap-4 lg:gap-6">
+                                {/* Mobile Menu Toggle */}
+                                <button
+                                    onClick={() => setIsMobileMenuOpen(true)}
+                                    className="lg:hidden p-2 -ml-2 text-text-secondary hover:text-primary rounded-lg hover:bg-surface-secondary transition-colors"
+                                >
+                                    <Menu size={24} />
+                                </button>
 
-                        <ProjectSelector
-                            currentProject={currentProject}
-                            projects={projects}
-                            onProjectChange={switchProject}
-                            onCreateProject={() => setShowCreateDialog(true)}
-                        />
-                        <div className="hidden lg:block h-6 w-px bg-border"></div>
-                        <div className="hidden md:block">
-                            <h2 className="text-xl font-heading font-bold text-text-primary animate-fade-in">{getPageTitle()}</h2>
-                            <p className="text-xs text-text-tertiary font-medium">Manage your influencer campaigns</p>
-                        </div>
-                    </div>
+                                <div className="hidden md:block">
+                                    <h2 className="text-xl font-heading font-bold text-text-primary animate-fade-in">{getPageTitle()}</h2>
+                                    <p className="text-xs text-text-tertiary font-medium">Manage your influencer campaigns</p>
+                                </div>
+                            </div>
 
-                    <div className="flex items-center gap-4">
-                        <button className="p-2.5 text-text-tertiary hover:text-primary hover:bg-surface-secondary rounded-full transition-all relative border border-transparent hover:border-border hover:shadow-soft-sm">
-                            <Bell size={20} />
-                            <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-error rounded-full border-2 border-white ring-1 ring-error/20" />
-                        </button>
-                    </div>
-                </header>
+                            <div className="flex items-center gap-4">
+                                <button className="p-2.5 text-text-tertiary hover:text-primary hover:bg-surface-secondary rounded-full transition-all relative border border-transparent hover:border-border hover:shadow-soft-sm">
+                                    <Bell size={20} />
+                                    <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-error rounded-full border-2 border-white ring-1 ring-error/20" />
+                                </button>
+                            </div>
+                        </header>
+                    )}
 
                 {/* Content Area */}
                 <div className="flex-1 p-4 lg:p-8 overflow-y-auto scroll-smooth">

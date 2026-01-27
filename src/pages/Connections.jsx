@@ -146,25 +146,6 @@ const Connections = () => {
 
     return (
         <div className="min-h-screen bg-bg-secondary p-8 font-sans text-text-primary animate-fade-in">
-            {/* Header */}
-            <header className="mb-8">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div>
-                        <h1 className="text-3xl font-heading font-bold text-text-primary">红人建联</h1>
-                        <p className="text-text-secondary mt-1">管理和跟踪您的红人关系</p>
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <button
-                            onClick={handleExport}
-                            className="btn btn-secondary flex items-center gap-2 group"
-                        >
-                            <Download size={18} className="text-text-secondary group-hover:text-text-primary transition-colors" />
-                            <span>导出全部</span>
-                        </button>
-                    </div>
-                </div>
-            </header>
-
             {/* Controls Bar */}
             <div className="bg-surface rounded-soft-xl shadow-soft p-4 mb-6 flex flex-col lg:flex-row gap-4 items-center justify-between border border-border">
                 {/* Search */}
@@ -179,7 +160,7 @@ const Connections = () => {
                     />
                 </div>
 
-                {/* Filters */}
+                {/* Filters & Actions */}
                 <div className="flex items-center gap-3 w-full lg:w-auto overflow-x-auto pb-2 lg:pb-0">
                     <div className="relative min-w-[140px]">
                         <select
@@ -217,6 +198,14 @@ const Connections = () => {
                         </select>
                         <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-text-tertiary pointer-events-none" size={16} />
                     </div>
+
+                    <button
+                        onClick={handleExport}
+                        className="btn btn-secondary flex items-center gap-2 group whitespace-nowrap ml-2"
+                    >
+                        <Download size={18} className="text-text-secondary group-hover:text-text-primary transition-colors" />
+                        <span>导出全部</span>
+                    </button>
                 </div>
             </div>
 

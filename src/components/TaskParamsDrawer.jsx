@@ -210,7 +210,7 @@ const TaskParamsDrawer = ({ isOpen, onClose, task }) => {
 
             {/* Drawer */}
             <div
-                className={`fixed right-0 top-0 h-full w-full max-w-2xl bg-white shadow-2xl z-50 transform transition-transform duration-300 flex flex-col ${isOpen ? 'translate-x-0' : 'translate-x-full'
+                className={`fixed right-0 top-0 h-screen w-full max-w-2xl bg-white shadow-2xl z-50 transform transition-transform duration-300 flex flex-col ${isOpen ? 'translate-x-0' : 'translate-x-full'
                     }`}
             >
                 {/* Header */}
@@ -228,7 +228,7 @@ const TaskParamsDrawer = ({ isOpen, onClose, task }) => {
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 overflow-y-auto px-6 py-6 pb-12">
+                <div className="flex-1 overflow-y-auto px-6 py-6 pb-32">
                     {task.searchMethod === '关键词搜索'
                         ? renderKeywordSearchParams(params)
                         : renderInfluencerIdSearchParams(params)
