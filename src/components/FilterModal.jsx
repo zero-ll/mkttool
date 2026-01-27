@@ -56,7 +56,7 @@ const FilterModal = ({ isOpen, onClose, filters: initialFilters, onApply, onRese
             businessMatch: [0, 100],
             avgViews: [0, 10000000],
             estimatedCPM: [0, 1000],
-            hasEmail: ''
+            engagementRate: [0, 100]
         };
         setFilters(resetFilters);
     };
@@ -126,19 +126,7 @@ const FilterModal = ({ isOpen, onClose, filters: initialFilters, onApply, onRese
                             />
                         </div>
 
-                        {/* Email */}
-                        <div>
-                            <label className="block text-sm font-bold text-text-primary mb-2">邮箱可用性</label>
-                            <select
-                                value={filters.hasEmail}
-                                onChange={(e) => handleChange('hasEmail', e.target.value)}
-                                className="w-full px-4 py-2.5 bg-surface-secondary border border-border rounded-soft-lg text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all appearance-none cursor-pointer"
-                            >
-                                <option value="">全部红人</option>
-                                <option value="yes">有邮箱</option>
-                                <option value="no">无邮箱</option>
-                            </select>
-                        </div>
+
                     </div>
 
                     {/* Ranges Grid */}
@@ -195,22 +183,98 @@ const FilterModal = ({ isOpen, onClose, filters: initialFilters, onApply, onRese
                             </div>
                         </div>
                     </div>
-                </div>
+                    {/* Metrics Ranges Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2 border-t border-border-subtle">
+                        {/* Avg Views Range */}
+                        <div>
+                            <label className="block text-sm font-bold text-text-primary mb-2">
+                                平均观看: {(filters.avgViews[0] / 1000).toFixed(0)}K - {(filters.avgViews[1] / 1000).toFixed(0)}K
+                            </label>
+                            <div className="flex gap-3 items-center">
+                                <input
+                                    type="number"
+                                    min="0"
+                                    value={filters.avgViews[0]}
+                                    onChange={(e) => handleChange('avgViews', [parseInt(e.target.value) || 0, filters.avgViews[1]])}
+                                    className="w-full px-3 py-2 bg-surface-secondary border border-border rounded-soft text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                />
+                                <span className="text-text-tertiary font-medium">-</span>
+                                <input
+                                    type="number"
+                                    min="0"
+                                    value={filters.avgViews[1]}
+                                    onChange={(e) => handleChange('avgViews', [filters.avgViews[0], parseInt(e.target.value) || 10000000])}
+                                    className="w-full px-3 py-2 bg-surface-secondary border border-border rounded-soft text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                />
+                            </div>
+                        </div>
 
-                {/* Footer */}
-                <div className="p-6 border-t border-border bg-surface-secondary flex items-center justify-end gap-3">
-                    <button
-                        onClick={handleReset}
-                        className="px-6 py-2.5 bg-surface border border-border hover:bg-white text-text-secondary hover:text-text-primary rounded-soft-lg font-bold text-sm transition-all shadow-sm"
-                    >
-                        重置
-                    </button>
-                    <button
-                        onClick={handleApply}
-                        className="px-8 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-soft-lg font-bold text-sm shadow-soft-md hover:shadow-glow-orange transition-all transform hover:-translate-y-0.5"
-                    >
-                        应用筛选
-                    </button>
+                        {/* Estimated CPM Range */}
+                        <div>
+                            <label className="block text-sm font-bold text-text-primary mb-2">
+                                预估 CPM ($): {filters.estimatedCPM[0]} - {filters.estimatedCPM[1]}
+                            </label>
+                            <div className="flex gap-3 items-center">
+                                <input
+                                    type="number"
+                                    min="0"
+                                    value={filters.estimatedCPM[0]}
+                                    onChange={(e) => handleChange('estimatedCPM', [parseInt(e.target.value) || 0, filters.estimatedCPM[1]])}
+                                    className="w-full px-3 py-2 bg-surface-secondary border border-border rounded-soft text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                />
+                                <span className="text-text-tertiary font-medium">-</span>
+                                <input
+                                    type="number"
+                                    min="0"
+                                    value={filters.estimatedCPM[1]}
+                                    onChange={(e) => handleChange('estimatedCPM', [filters.estimatedCPM[0], parseInt(e.target.value) || 1000])}
+                                    className="w-full px-3 py-2 bg-surface-secondary border border-border rounded-soft text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                />
+                            </div>
+                        </div>
+
+                        {/* Engagement Rate Range */}
+                        <div>
+                            <label className="block text-sm font-bold text-text-primary mb-2">
+                                互动率 (%): {filters.engagementRate[0]}% - {filters.engagementRate[1]}%
+                            </label>
+                            <div className="flex gap-3 items-center">
+                                <input
+                                    type="number"
+                                    min="0"
+                                    max="100"
+                                    value={filters.engagementRate[0]}
+                                    onChange={(e) => handleChange('engagementRate', [parseInt(e.target.value) || 0, filters.engagementRate[1]])}
+                                    className="w-full px-3 py-2 bg-surface-secondary border border-border rounded-soft text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                />
+                                <span className="text-text-tertiary font-medium">-</span>
+                                <input
+                                    type="number"
+                                    min="0"
+                                    max="100"
+                                    value={filters.engagementRate[1]}
+                                    onChange={(e) => handleChange('engagementRate', [filters.engagementRate[0], parseInt(e.target.value) || 100])}
+                                    className="w-full px-3 py-2 bg-surface-secondary border border-border rounded-soft text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="p-6 border-t border-border bg-surface-secondary flex items-center justify-end gap-3">
+                        <button
+                            onClick={handleReset}
+                            className="px-6 py-2.5 bg-surface border border-border hover:bg-white text-text-secondary hover:text-text-primary rounded-soft-lg font-bold text-sm transition-all shadow-sm"
+                        >
+                            重置
+                        </button>
+                        <button
+                            onClick={handleApply}
+                            className="px-8 py-2.5 bg-primary hover:bg-primary-hover text-white rounded-soft-lg font-bold text-sm shadow-soft-md hover:shadow-glow-orange transition-all transform hover:-translate-y-0.5"
+                        >
+                            应用筛选
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

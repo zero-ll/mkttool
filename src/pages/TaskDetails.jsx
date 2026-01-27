@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Download, Settings2, Heart, Mail, MailX, Star, TrendingUp, Eye, Filter, MonitorPlay } from 'lucide-react';
+import { ArrowLeft, Download, Settings2, Heart, Star, TrendingUp, Eye, Filter, MonitorPlay } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import FilterModal from '../components/FilterModal';
 import InfluencerDetailModal from '../components/InfluencerDetailModal';
@@ -74,6 +74,7 @@ const TaskDetails = () => {
     const [batchViewIndex, setBatchViewIndex] = useState(0);
 
     // Filter State
+    // Filter State
     const [filters, setFilters] = useState({
         search: '',
         tier: [],
@@ -83,7 +84,7 @@ const TaskDetails = () => {
         businessMatch: [0, 100],
         avgViews: [0, 10000000],
         estimatedCPM: [0, 1000],
-        hasEmail: ''
+        engagementRate: [0, 100],
     });
 
     // Mock Data
@@ -256,22 +257,22 @@ const TaskDetails = () => {
     }
 
     return (
-        <div className="flex h-screen relative overflow-hidden" style={{ background: 'var(--bg-gradient)' }}>
+        <div className="flex h-screen relative overflow-hidden" style={{ background: 'var(--bg-gradient)' }} >
             {/* Main Content (Full Width) */}
-            <main className="flex-1 flex flex-col overflow-hidden">
+            < main className="flex-1 flex flex-col overflow-hidden" >
                 {/* Header */}
-                <header className="glass-panel border-b border-white/20 px-8 py-6 backdrop-blur-strong">
+                < header className="glass-panel border-b border-white/20 px-8 py-6 backdrop-blur-strong" >
                     {/* Breadcrumb */}
-                    <button
+                    < button
                         onClick={() => navigate('/')}
                         className="flex items-center gap-2 text-text-secondary hover:text-primary transition-colors mb-4 group"
                     >
                         <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
                         <span className="text-sm font-bold">返回任务列表</span>
-                    </button>
+                    </button >
 
                     {/* Title & Actions */}
-                    <div className="flex items-center justify-between">
+                    < div className="flex items-center justify-between" >
                         <div>
                             <h1 className="text-2xl font-heading font-bold text-text-primary mb-1">{task.name}</h1>
                             <p className="text-sm text-text-tertiary font-medium">
@@ -314,11 +315,11 @@ const TaskDetails = () => {
                                 <span className="hidden sm:inline">Export</span>
                             </button>
                         </div>
-                    </div>
-                </header>
+                    </div >
+                </header >
 
                 {/* Table Container */}
-                <div className="flex-1 overflow-auto p-8">
+                < div className="flex-1 overflow-auto p-8" >
                     <div className="neu-card overflow-hidden">
                         <div className="overflow-x-auto">
                             <table className="w-full">
@@ -414,11 +415,6 @@ const TaskDetails = () => {
                                                                     alt={inf.name}
                                                                     className="w-12 h-12 rounded-full object-cover ring-2 ring-white shadow-soft-sm"
                                                                 />
-                                                                {inf.hasEmail && (
-                                                                    <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-success rounded-full border-2 border-white flex items-center justify-center">
-                                                                        <Mail size={10} className="text-white" />
-                                                                    </div>
-                                                                )}
                                                             </div>
                                                             <div>
                                                                 <p className="text-sm font-bold text-text-primary group-hover:text-primary transition-colors">
@@ -566,58 +562,62 @@ const TaskDetails = () => {
                     </div>
 
                     {/* Pagination */}
-                    {displayData.length > 0 && (
-                        <div className="flex items-center justify-between mt-6 px-2">
-                            <p className="text-sm text-text-secondary font-medium">
-                                Showing {displayData.length} influencers
-                            </p>
-                            <div className="flex gap-2">
-                                <button className="px-4 py-2 border border-border rounded-lg text-sm font-bold text-text-secondary hover:bg-surface-secondary transition-colors disabled:opacity-50" disabled>
-                                    Previous
-                                </button>
-                                <button className="px-4 py-2 border border-border rounded-lg text-sm font-bold text-text-secondary hover:bg-surface-secondary transition-colors disabled:opacity-50" disabled>
-                                    Next
-                                </button>
+                    {
+                        displayData.length > 0 && (
+                            <div className="flex items-center justify-between mt-6 px-2">
+                                <p className="text-sm text-text-secondary font-medium">
+                                    Showing {displayData.length} influencers
+                                </p>
+                                <div className="flex gap-2">
+                                    <button className="px-4 py-2 border border-border rounded-lg text-sm font-bold text-text-secondary hover:bg-surface-secondary transition-colors disabled:opacity-50" disabled>
+                                        Previous
+                                    </button>
+                                    <button className="px-4 py-2 border border-border rounded-lg text-sm font-bold text-text-secondary hover:bg-surface-secondary transition-colors disabled:opacity-50" disabled>
+                                        Next
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    )}
-                </div>
-            </main>
+                        )
+                    }
+                </div >
+            </main >
 
             {/* Column Settings Panel */}
-            {showColumnSettings && (
-                <div className="fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center z-50 animate-fade-in" onClick={() => setShowColumnSettings(false)}>
-                    <div className="neu-card p-8 w-[480px] max-h-[600px] flex flex-col" onClick={(e) => e.stopPropagation()} style={{ borderRadius: 'var(--radius-xl)' }}>
-                        <h3 className="text-xl font-heading font-bold text-text-primary mb-6 flex items-center gap-2">
-                            <Settings2 size={24} className="text-primary" />
-                            列设置
-                        </h3>
-                        <div className="space-y-2 max-h-96 overflow-y-auto pr-2 flex-1">
-                            {Object.keys(visibleColumns).map((col) => (
-                                <label key={col} className="flex items-center gap-4 p-4 hover:bg-gradient-to-r hover:from-orange-50/50 hover:to-transparent rounded-xl cursor-pointer transition-all duration-200 group">
-                                    <input
-                                        type="checkbox"
-                                        checked={visibleColumns[col]}
-                                        onChange={(e) => setVisibleColumns({ ...visibleColumns, [col]: e.target.checked })}
-                                        className="w-5 h-5 text-primary rounded-lg focus:ring-2 focus:ring-primary/20 cursor-pointer"
-                                        disabled={col === 'influencer'}
-                                        style={{ accentColor: 'var(--accent-primary)' }}
-                                    />
-                                    <span className="text-sm font-semibold text-text-primary group-hover:text-primary transition-colors">
-                                        {columnLabels[col] || col.replace(/([A-Z])/g, ' $1').trim()}
-                                    </span>
-                                </label>
-                            ))}
+            {
+                showColumnSettings && (
+                    <div className="fixed inset-0 bg-black/40 backdrop-blur-md flex items-center justify-center z-50 animate-fade-in" onClick={() => setShowColumnSettings(false)}>
+                        <div className="neu-card p-8 w-[480px] max-h-[600px] flex flex-col" onClick={(e) => e.stopPropagation()} style={{ borderRadius: 'var(--radius-xl)' }}>
+                            <h3 className="text-xl font-heading font-bold text-text-primary mb-6 flex items-center gap-2">
+                                <Settings2 size={24} className="text-primary" />
+                                列设置
+                            </h3>
+                            <div className="space-y-2 max-h-96 overflow-y-auto pr-2 flex-1">
+                                {Object.keys(visibleColumns).map((col) => (
+                                    <label key={col} className="flex items-center gap-4 p-4 hover:bg-gradient-to-r hover:from-orange-50/50 hover:to-transparent rounded-xl cursor-pointer transition-all duration-200 group">
+                                        <input
+                                            type="checkbox"
+                                            checked={visibleColumns[col]}
+                                            onChange={(e) => setVisibleColumns({ ...visibleColumns, [col]: e.target.checked })}
+                                            className="w-5 h-5 text-primary rounded-lg focus:ring-2 focus:ring-primary/20 cursor-pointer"
+                                            disabled={col === 'influencer'}
+                                            style={{ accentColor: 'var(--accent-primary)' }}
+                                        />
+                                        <span className="text-sm font-semibold text-text-primary group-hover:text-primary transition-colors">
+                                            {columnLabels[col] || col.replace(/([A-Z])/g, ' $1').trim()}
+                                        </span>
+                                    </label>
+                                ))}
+                            </div>
+                            <button
+                                onClick={() => setShowColumnSettings(false)}
+                                className="w-full mt-6 neu-btn-primary"
+                            >
+                                完成
+                            </button>
                         </div>
-                        <button
-                            onClick={() => setShowColumnSettings(false)}
-                            className="w-full mt-6 neu-btn-primary"
-                        >
-                            完成
-                        </button>
                     </div>
-                </div>
-            )}
+                )
+            }
 
             {/* 筛选弹窗 */}
             <FilterModal
@@ -647,7 +647,7 @@ const TaskDetails = () => {
                 onConnect={handleConnect}
                 connectedIds={connectedInfluencers}
             />
-        </div>
+        </div >
     );
 };
 

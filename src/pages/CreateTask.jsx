@@ -24,6 +24,7 @@ const CreateTask = () => {
         targetCountries: [],
         fanRangeOperator: '>=',
         fanRangeValue: '',
+        minSubscribers: '100', // 新增最小粉丝数
         excludeSearched: true,
         excludeDeduplicated: true,
 
@@ -141,6 +142,12 @@ const CreateTask = () => {
                 return;
             }
 
+            // Validate Min Subscribers
+            if (keywordForm.minSubscribers && parseInt(keywordForm.minSubscribers) < 100) {
+                alert('最小粉丝数不能小于 100');
+                return;
+            }
+
             newTaskData = {
                 name: keywordForm.taskName,
                 keywords: keywordForm.industryKeywords.join(', '),
@@ -164,9 +171,9 @@ const CreateTask = () => {
 
     // 步骤指示器
     const steps = [
-        { number: 1, title: '基本信息', desc: 'Task Details' },
-        { number: 2, title: '搜索配置', desc: 'Search Config' },
-        { number: 3, title: '目标画像', desc: 'Target Profile' }
+        { number: 1, title: '基本信息', desc: '任务详情' },
+        { number: 2, title: '搜索配置', desc: '搜索设置' },
+        { number: 3, title: '目标画像', desc: '红人类型' }
     ];
 
     return (
@@ -174,12 +181,12 @@ const CreateTask = () => {
             {/* Header */}
             <div className="mb-10 text-center">
                 <div className="flex items-center justify-center gap-2 text-sm text-text-secondary mb-3">
-                    <span className="cursor-pointer hover:text-text-primary transition-colors" onClick={() => navigate('/')}>Tasks</span>
+                    <span className="cursor-pointer hover:text-text-primary transition-colors" onClick={() => navigate('/')}>任务列表</span>
                     <span className="text-text-tertiary">›</span>
-                    <span className="font-medium text-text-primary">Create New Task</span>
+                    <span className="font-medium text-text-primary">新建任务</span>
                 </div>
-                <h1 className="text-4xl font-extrabold text-text-primary tracking-tight mb-3">Define Your Task</h1>
-                <p className="text-text-secondary text-lg max-w-2xl mx-auto">Set the foundation for your KOL discovery by naming your task and adding initial keywords.</p>
+                <h1 className="text-4xl font-extrabold text-text-primary tracking-tight mb-3">创建新任务</h1>
+                <p className="text-text-secondary text-lg max-w-2xl mx-auto">通过关键词搜索或上传列表来发现目标红人。</p>
             </div>
 
             {/* Main Content Card - Glass Effect */}
@@ -225,7 +232,7 @@ const CreateTask = () => {
                                     }`}
                             >
                                 <Search size={16} strokeWidth={2.5} />
-                                Keyword Search
+                                关键词搜索
                             </button>
                             <button
                                 onClick={() => setActiveTab('influencer')}
@@ -235,7 +242,7 @@ const CreateTask = () => {
                                     }`}
                             >
                                 <Upload size={16} strokeWidth={2.5} />
-                                Upload List
+                                上传列表
                             </button>
                         </div>
                     </div>
@@ -253,12 +260,12 @@ const CreateTask = () => {
                                         {/* Task Name */}
                                         <div>
                                             <label className="block text-sm font-bold text-text-primary mb-2">
-                                                Task Name <span className="text-primary">*</span>
+                                                任务名称 <span className="text-primary">*</span>
                                             </label>
                                             <input
                                                 required
                                                 type="text"
-                                                placeholder="e.g. Summer 2024 Tech Reviewers"
+                                                placeholder="例如：2024 夏季科技红人推广"
                                                 className="w-full bg-gray-50/50 border border-border-subtle rounded-xl px-4 py-3.5 text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-[15px] shadow-sm"
                                                 value={keywordForm.taskName}
                                                 onChange={(e) => setKeywordForm({ ...keywordForm, taskName: e.target.value })}
@@ -268,31 +275,31 @@ const CreateTask = () => {
                                         {/* Industry Keywords - Highlighting this as key input */}
                                         <div className="bg-orange-50/30 p-6 rounded-2xl border border-orange-100/50">
                                             <TagInput
-                                                label={<span className="text-primary font-bold flex items-center gap-2"><Sparkles size={14} /> Industry Keywords</span>}
+                                                label={<span className="text-primary font-bold flex items-center gap-2"><Sparkles size={14} /> 行业关键词</span>}
                                                 required
-                                                placeholder="Smart home, IoT, AI gadgets..."
+                                                placeholder="输入关键词按回车确认，例如：智能家居, IoT..."
                                                 value={keywordForm.industryKeywords}
                                                 onChange={(val) => setKeywordForm({ ...keywordForm, industryKeywords: val })}
                                                 className="bg-white border-orange-100"
                                                 theme="warm"
                                             />
-                                            <p className="text-xs text-text-tertiary mt-2 ml-1">Type keywords and press Enter. Add at least one to start.</p>
+                                            <p className="text-xs text-text-tertiary mt-2 ml-1">请至少输入一个关键词。</p>
                                         </div>
 
                                         {/* Brand & Competitor Keywords */}
                                         <div className="grid grid-cols-2 gap-6">
                                             <TagInput
-                                                label="Brand Keywords"
+                                                label="本品关键词"
                                                 required
-                                                placeholder="Your brand name or product names"
+                                                placeholder="您的品牌名称或产品名称"
                                                 value={keywordForm.brandKeywords}
                                                 onChange={(val) => setKeywordForm({ ...keywordForm, brandKeywords: val })}
                                             />
 
                                             <TagInput
-                                                label="Competitor Keywords"
+                                                label="竞品关键词"
                                                 required
-                                                placeholder="Competitor names or similar products"
+                                                placeholder="竞争对手品牌或类似产品"
                                                 value={keywordForm.competitorKeywords}
                                                 onChange={(val) => setKeywordForm({ ...keywordForm, competitorKeywords: val })}
                                             />
@@ -308,7 +315,7 @@ const CreateTask = () => {
                                         {/* Videos per Keyword */}
                                         <div>
                                             <label className="block text-sm font-bold text-text-primary mb-2">
-                                                Videos per Keyword <span className="text-primary">*</span>
+                                                单个关键词搜索视频数 <span className="text-primary">*</span>
                                             </label>
                                             <div className="relative">
                                                 <input
@@ -326,7 +333,7 @@ const CreateTask = () => {
                                         {/* Sort Order */}
                                         <div>
                                             <label className="block text-sm font-bold text-text-primary mb-2">
-                                                Sort Order
+                                                排序方式
                                             </label>
                                             <div className="relative">
                                                 <select
@@ -334,9 +341,9 @@ const CreateTask = () => {
                                                     value={keywordForm.sortBy}
                                                     onChange={(e) => setKeywordForm({ ...keywordForm, sortBy: e.target.value })}
                                                 >
-                                                    <option value="相关性">Relevance (Default)</option>
-                                                    <option value="观看次数">View Count</option>
-                                                    <option value="发布日期">Date Published</option>
+                                                    <option value="相关性">相关性 (默认)</option>
+                                                    <option value="观看次数">观看次数</option>
+                                                    <option value="发布日期">发布日期</option>
                                                 </select>
                                                 <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-text-tertiary">
                                                     <ChevronDown size={18} strokeWidth={2.5} />
@@ -348,42 +355,62 @@ const CreateTask = () => {
                                     {/* Country Preference */}
                                     <div>
                                         <MultiSelect
-                                            label="Country Preference"
+                                            label="目标国家"
                                             required
-                                            placeholder="Select target countries"
+                                            placeholder="选择目标国家"
                                             value={keywordForm.targetCountries}
                                             onChange={(val) => setKeywordForm({ ...keywordForm, targetCountries: val })}
                                         />
                                     </div>
 
-                                    {/* Search Dimension - Segmented Control */}
-                                    <div>
-                                        <label className="block text-sm font-bold text-text-primary mb-2">
-                                            Search Dimension
-                                        </label>
-                                        <div className="flex bg-gray-100 p-1.5 rounded-xl max-w-md">
-                                            <button
-                                                type="button"
-                                                onClick={() => setKeywordForm({ ...keywordForm, targetRegion: '按视频' })}
-                                                className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all ${keywordForm.targetRegion === '按视频'
-                                                    ? 'bg-white text-primary shadow-sm'
-                                                    : 'text-text-secondary hover:text-text-primary'
-                                                    }`}
-                                            >
-                                                <Video size={16} className={keywordForm.targetRegion === '按视频' ? 'fill-current' : ''} />
-                                                Videos
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={() => setKeywordForm({ ...keywordForm, targetRegion: '按频道' })}
-                                                className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all ${keywordForm.targetRegion === '按频道'
-                                                    ? 'bg-white text-primary shadow-sm'
-                                                    : 'text-text-secondary hover:text-text-primary'
-                                                    }`}
-                                            >
-                                                <User size={16} className={keywordForm.targetRegion === '按频道' ? 'fill-current' : ''} />
-                                                Channels
-                                            </button>
+                                    <div className="grid grid-cols-2 gap-8">
+                                        {/* Search Dimension - Segmented Control */}
+                                        <div>
+                                            <label className="block text-sm font-bold text-text-primary mb-2">
+                                                搜索维度
+                                            </label>
+                                            <div className="flex bg-gray-100 p-1.5 rounded-xl max-w-md">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setKeywordForm({ ...keywordForm, targetRegion: '按视频' })}
+                                                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all ${keywordForm.targetRegion === '按视频'
+                                                        ? 'bg-white text-primary shadow-sm'
+                                                        : 'text-text-secondary hover:text-text-primary'
+                                                        }`}
+                                                >
+                                                    <Video size={16} className={keywordForm.targetRegion === '按视频' ? 'fill-current' : ''} />
+                                                    视频
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setKeywordForm({ ...keywordForm, targetRegion: '按频道' })}
+                                                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all ${keywordForm.targetRegion === '按频道'
+                                                        ? 'bg-white text-primary shadow-sm'
+                                                        : 'text-text-secondary hover:text-text-primary'
+                                                        }`}
+                                                >
+                                                    <User size={16} className={keywordForm.targetRegion === '按频道' ? 'fill-current' : ''} />
+                                                    频道
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* Min Subscribers */}
+                                        <div>
+                                            <label className="block text-sm font-bold text-text-primary mb-2">
+                                                最小粉丝数 <span className="text-primary">*</span>
+                                            </label>
+                                            <div className="relative">
+                                                <input
+                                                    required
+                                                    type="number"
+                                                    min="100"
+                                                    placeholder="100"
+                                                    className="w-full bg-gray-50/50 border border-border-subtle rounded-xl px-4 py-3.5 text-text-primary font-medium focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                                                    value={keywordForm.minSubscribers}
+                                                    onChange={(e) => setKeywordForm({ ...keywordForm, minSubscribers: e.target.value })}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
 
@@ -402,8 +429,8 @@ const CreateTask = () => {
                                                 </div>
                                             </div>
                                             <div className="flex-1">
-                                                <span className="text-sm font-bold text-text-primary group-hover:text-primary transition-colors">Exclude previously searched influencers</span>
-                                                <p className="text-xs text-text-secondary mt-1">Smartly filters out influencers you've already discovered in other tasks.</p>
+                                                <span className="text-sm font-bold text-text-primary group-hover:text-primary transition-colors">排除已搜索过的红人</span>
+                                                <p className="text-xs text-text-secondary mt-1">智能过滤掉您在其他任务中已经发现的红人。</p>
                                             </div>
                                         </label>
 
@@ -420,8 +447,8 @@ const CreateTask = () => {
                                                 </div>
                                             </div>
                                             <div className="flex-1">
-                                                <span className="text-sm font-bold text-text-primary group-hover:text-primary transition-colors">Exclude deduplicated influencers</span>
-                                                <p className="text-xs text-text-secondary mt-1">Avoids influencers from your global exclusion list.</p>
+                                                <span className="text-sm font-bold text-text-primary group-hover:text-primary transition-colors">排除去重的红人</span>
+                                                <p className="text-xs text-text-secondary mt-1">避免从全局排除列表中出现红人。</p>
                                             </div>
                                         </label>
                                     </div>
@@ -435,29 +462,29 @@ const CreateTask = () => {
                                         <div className="w-16 h-16 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
                                             <User size={32} />
                                         </div>
-                                        <h3 className="text-xl font-bold text-text-primary">Target Influencer Profile</h3>
-                                        <p className="text-sm text-text-secondary mt-2 max-w-md mx-auto">Analyze channel content to find the best match. Filtering by types helps improve relevance score.</p>
+                                        <h3 className="text-xl font-bold text-text-primary">目标红人画像</h3>
+                                        <p className="text-sm text-text-secondary mt-2 max-w-md mx-auto">分析频道内容以找到最佳匹配。按类型过滤有助于提高相关性得分。</p>
                                     </div>
 
                                     <div className="space-y-6">
                                         <TagInput
-                                            label="P0 Channel Types (Priority)"
+                                            label="P0 频道类型 (必须匹配)"
                                             required
-                                            placeholder="e.g. Tech Reviews, Gadget Unboxing..."
+                                            placeholder="例如：科技评测, 开箱视频..."
                                             value={keywordForm.p0Types}
                                             onChange={(val) => setKeywordForm({ ...keywordForm, p0Types: val })}
                                         />
                                         <TagInput
-                                            label="P1 Channel Types (Secondary)"
+                                            label="P1 频道类型 (次要匹配)"
                                             required
-                                            placeholder="e.g. Lifestyle, DIY..."
+                                            placeholder="例如：生活方式, DIY..."
                                             value={keywordForm.p1Types}
                                             onChange={(val) => setKeywordForm({ ...keywordForm, p1Types: val })}
                                         />
                                         <TagInput
-                                            label="P2 Channel Types (Acceptable)"
+                                            label="P2 频道类型 (可接受)"
                                             required
-                                            placeholder="e.g. General Tech, News..."
+                                            placeholder="例如：通用科技, 新闻..."
                                             value={keywordForm.p2Types}
                                             onChange={(val) => setKeywordForm({ ...keywordForm, p2Types: val })}
                                         />
@@ -600,7 +627,7 @@ const CreateTask = () => {
                             onClick={() => navigate('/')}
                             className="px-6 py-2.5 rounded-lg text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors"
                         >
-                            Cancel
+                            取消
                         </button>
 
                         <div className="flex items-center gap-3">
@@ -610,7 +637,7 @@ const CreateTask = () => {
                                     onClick={handlePrevious}
                                     className="px-6 py-2.5 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors font-semibold"
                                 >
-                                    Previous
+                                    上一步
                                 </button>
                             )}
 
@@ -620,7 +647,7 @@ const CreateTask = () => {
                                     onClick={handleNext}
                                     className="flex items-center gap-2 px-8 py-2.5 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white rounded-lg text-sm font-bold shadow-lg shadow-orange-500/20 transition-all transform hover:-translate-y-0.5"
                                 >
-                                    Next Step
+                                    下一步
                                     <ChevronRight size={16} />
                                 </button>
                             ) : (
@@ -629,7 +656,7 @@ const CreateTask = () => {
                                     className="flex items-center gap-2 px-8 py-2.5 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white rounded-lg text-sm font-bold shadow-lg shadow-orange-500/20 transition-all transform hover:-translate-y-0.5"
                                 >
                                     <Sparkles size={16} className="fill-current" />
-                                    Start Search Task
+                                    开始搜索任务
                                 </button>
                             )}
                         </div>

@@ -210,11 +210,11 @@ const TaskParamsDrawer = ({ isOpen, onClose, task }) => {
 
             {/* Drawer */}
             <div
-                className={`fixed right-0 top-0 h-full w-full max-w-2xl bg-white shadow-2xl z-50 transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : 'translate-x-full'
+                className={`fixed right-0 top-0 h-full w-full max-w-2xl bg-white shadow-2xl z-50 transform transition-transform duration-300 flex flex-col ${isOpen ? 'translate-x-0' : 'translate-x-full'
                     }`}
             >
                 {/* Header */}
-                <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+                <div className="flex-none flex items-center justify-between px-6 py-4 border-b border-slate-200">
                     <div>
                         <h2 className="text-lg font-semibold text-slate-900">任务参数</h2>
                         <p className="text-sm text-slate-500 mt-0.5">查看任务的详细配置信息</p>
@@ -228,7 +228,7 @@ const TaskParamsDrawer = ({ isOpen, onClose, task }) => {
                 </div>
 
                 {/* Content */}
-                <div className="overflow-y-auto h-[calc(100%-73px)] px-6 py-6">
+                <div className="flex-1 overflow-y-auto px-6 py-6 pb-12">
                     {task.searchMethod === '关键词搜索'
                         ? renderKeywordSearchParams(params)
                         : renderInfluencerIdSearchParams(params)
@@ -243,7 +243,7 @@ const TaskParamsDrawer = ({ isOpen, onClose, task }) => {
 const ParamItem = ({ label, value, isTags, isBoolean }) => (
     <div className="flex items-start py-2">
         <span className="text-sm text-slate-500 w-40 flex-shrink-0">{label}</span>
-        <span className={`text-sm flex-1 ${isBoolean
+        <span className={`text-sm flex-1 break-words ${isBoolean
             ? (value === '是' ? 'text-green-600 font-medium' : 'text-slate-400')
             : 'text-slate-900'
             }`}>

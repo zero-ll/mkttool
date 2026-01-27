@@ -34,7 +34,6 @@ const TaskCard = ({ task, onRename, onDelete, onViewParams }) => {
                     <h3 className="text-lg font-heading font-bold text-text-primary mb-1 group-hover:text-primary transition-colors">
                         {task.name}
                     </h3>
-                    <p className="text-xs text-text-tertiary font-medium">{task.searchMethod || '关键词搜索'}</p>
                 </div>
 
                 {/* Actions Menu */}
@@ -57,45 +56,43 @@ const TaskCard = ({ task, onRename, onDelete, onViewParams }) => {
                 {statusConfig.text}
             </div>
 
-            {/* Metrics */}
-            <div className="grid grid-cols-2 gap-4 mb-4">
-                <div
-                    className="flex items-center gap-2 cursor-pointer hover:bg-primary/5 rounded-lg p-2 -m-2 transition-colors"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        if (task.status === 'completed') navigate(`/task/${task.id}`);
-                    }}
-                    title={task.status === 'completed' ? '点击查看搜索结果' : ''}
-                >
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                        <Users size={16} className="text-primary" />
-                    </div>
-                    <div>
-                        <p className="text-xs text-text-tertiary">搜索结果</p>
-                        <p className="text-sm font-bold text-text-primary">
-                            {task.status === 'completed' ? `${task.results?.length || 0}` : '-'}
-                        </p>
+            {/* Metrics Row */}
+            <div className="grid grid-cols-4 gap-2 mb-4 pt-4 border-t border-border-subtle">
+                {/* Method */}
+                <div>
+                    <p className="text-[10px] text-text-tertiary mb-1">创建方式</p>
+                    <div className="flex items-center gap-1">
+                        <Loader2 size={12} className="text-text-tertiary" />
+                        <p className="text-xs font-medium text-text-secondary truncate">{task.searchMethod || '关键词搜索'}</p>
                     </div>
                 </div>
-                <div className="flex items-center gap-2">
-                    <div className="p-2 bg-info/10 rounded-lg">
-                        <Clock size={16} className="text-info" />
-                    </div>
-                    <div>
-                        <p className="text-xs text-text-tertiary">创建时间</p>
-                        <p className="text-sm font-bold text-text-primary">{task.createdAt}</p>
-                    </div>
-                </div>
-            </div>
 
-            {/* Creator */}
-            <div className="flex items-center gap-2 pt-4 border-t border-border">
-                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-white text-xs font-bold">
-                    {(task.creator || 'M').charAt(0)}
+                {/* Results */}
+                <div onClick={(e) => {
+                    e.stopPropagation();
+                    if (task.status === 'completed') navigate(`/task/${task.id}`);
+                }} className={task.status === 'completed' ? 'cursor-pointer hover:opacity-80' : ''}>
+                    <p className="text-[10px] text-text-tertiary mb-1">搜索结果</p>
+                    <p className="text-xs font-bold text-text-primary">
+                        {task.status === 'completed' ? `${task.results?.length || 0}` : '-'}
+                    </p>
                 </div>
-                <div className="flex-1">
-                    <p className="text-[10px] text-text-tertiary font-medium">创建人</p>
-                    <p className="text-xs text-text-secondary font-medium">{task.creator || 'Max User'}</p>
+
+                {/* Time */}
+                <div>
+                    <p className="text-[10px] text-text-tertiary mb-1">创建时间</p>
+                    <p className="text-xs font-medium text-text-secondary truncate" title={task.createdAt}>{task.createdAt}</p>
+                </div>
+
+                {/* Creator */}
+                <div>
+                    <p className="text-[10px] text-text-tertiary mb-1">创建人</p>
+                    <div className="flex items-center gap-1.5">
+                        <div className="w-4 h-4 rounded-full bg-primary/10 text-primary flex items-center justify-center text-[10px] font-bold">
+                            {(task.creator || 'M').charAt(0)}
+                        </div>
+                        <span className="text-xs font-medium text-text-secondary truncate">{task.creator || 'Max'}</span>
+                    </div>
                 </div>
             </div>
 
