@@ -11,7 +11,7 @@ import ExclusionList from './pages/ExclusionList';
 function App() {
   return (
     <AppProvider>
-      <Router>
+      <Router basename="/mkttool">
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<SearchTasks />} />
