@@ -86,55 +86,23 @@ const CreateTask = () => {
                     return;
                 }
             } else {
-                // ID Search Step 2 Validation
+                // 上传列表方式的第二步验证
                 if (idForm.industryKeywords.length === 0) {
-                    alert('行业关键词为必填项');
+                    alert('行业关键词为必填项，请至少添加一个关键词');
                     return;
                 }
                 if (idForm.brandKeywords.length === 0) {
-                    alert('本品关键词为必填项');
+                    alert('本品关键词为必填项，请至少添加一个关键词');
                     return;
                 }
                 if (idForm.competitorKeywords.length === 0) {
-                    alert('竞品关键词为必填项');
-                    return;
-                }
-                if (idForm.targetCountries.length === 0) {
-                    alert('请选择目标国家');
+                    alert('竞品关键词为必填项，请至少添加一个关键词');
                     return;
                 }
             }
         }
 
-        if (currentStep === 3) {
-            if (activeTab === 'keyword') {
-                if (keywordForm.p0Types.length === 0) {
-                    alert('P0 频道类型为必填项，请至少添加一个类型');
-                    return;
-                }
-                if (keywordForm.p1Types.length === 0) {
-                    alert('P1 频道类型为必填项，请至少添加一个类型');
-                    return;
-                }
-                if (keywordForm.p2Types.length === 0) {
-                    alert('P2 频道类型为必填项，请至少添加一个类型');
-                    return;
-                }
-            } else {
-                if (idForm.p0Types.length === 0) {
-                    alert('P0 频道类型为必填项，请至少添加一个类型');
-                    return;
-                }
-                if (idForm.p1Types.length === 0) {
-                    alert('P1 频道类型为必填项，请至少添加一个类型');
-                    return;
-                }
-                if (idForm.p2Types.length === 0) {
-                    alert('P2 频道类型为必填项，请至少添加一个类型');
-                    return;
-                }
-            }
-        }
+
 
         setCurrentStep(currentStep + 1);
     };
@@ -146,18 +114,47 @@ const CreateTask = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        // 如果不是最后一步，执行下一步操作，防止回车键直接提交表单
+        if (currentStep < 3) {
+            handleNext();
+            return;
+        }
+
+        // 验证第三步必填项
+        if (activeTab === 'keyword') {
+            if (keywordForm.p0Types.length === 0) {
+                alert('P0 频道类型为必填项，请至少添加一个类型');
+                return;
+            }
+            if (keywordForm.p1Types.length === 0) {
+                alert('P1 频道类型为必填项，请至少添加一个类型');
+                return;
+            }
+            if (keywordForm.p2Types.length === 0) {
+                alert('P2 频道类型为必填项，请至少添加一个类型');
+                return;
+            }
+        } else {
+            if (idForm.p0Types.length === 0) {
+                alert('P0 频道类型为必填项，请至少添加一个类型');
+                return;
+            }
+            if (idForm.p1Types.length === 0) {
+                alert('P1 频道类型为必填项，请至少添加一个类型');
+                return;
+            }
+            if (idForm.p2Types.length === 0) {
+                alert('P2 频道类型为必填项，请至少添加一个类型');
+                return;
+            }
+        }
+
         let newTaskData = {};
 
         if (activeTab === 'keyword') {
             // Validate Fan Range
             if (keywordForm.fanRangeValue && parseInt(keywordForm.fanRangeValue) < 10) {
                 alert('粉丝数区间数值不能小于 10');
-                return;
-            }
-
-            // Validate Step 3 for Keyword Search (since submit can happen here directly)
-            if (keywordForm.p0Types.length === 0) {
-                alert('P0 频道类型为必填项，请至少添加一个类型');
                 return;
             }
 
@@ -182,12 +179,6 @@ const CreateTask = () => {
                 searchMethod: '红人ID搜索',
                 details: { ...idForm }
             };
-
-            // Validate Step 3 for ID Search
-            if (idForm.p0Types.length === 0) {
-                alert('P0 频道类型为必填项，请至少添加一个类型');
-                return;
-            }
         }
 
         createTask(newTaskData);
@@ -524,29 +515,29 @@ const CreateTask = () => {
                             {currentStep === 1 && (
                                 <div className="space-y-6 max-w-2xl mx-auto animate-fade-in">
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-700 mb-2">
-                                            任务名称 <span className="text-red-500">*</span>
+                                        <label className="block text-sm font-bold text-text-primary mb-2">
+                                            任务名称 <span className="text-primary">*</span>
                                         </label>
                                         <input
                                             required
                                             type="text"
-                                            placeholder="例如：2024 夏季竞品分析"
-                                            className="w-full bg-white border border-slate-200 rounded-lg px-4 py-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-100 focus:border-orange-500 transition-all font-medium"
+                                            placeholder="例如：2024 夏季科技红人推广"
+                                            className="w-full bg-gray-50/50 border border-border-subtle rounded-xl px-4 py-3.5 text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium text-[15px] shadow-sm"
                                             value={idForm.name}
                                             onChange={(e) => setIdForm({ ...idForm, name: e.target.value })}
                                         />
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-700 mb-2">
-                                            上传列表 <span className="text-red-500">*</span>
+                                        <label className="block text-sm font-bold text-text-primary mb-2">
+                                            上传列表 <span className="text-primary">*</span>
                                         </label>
-                                        <div className="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:border-orange-400 hover:bg-orange-50/10 transition-colors cursor-pointer group">
-                                            <div className="w-12 h-12 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
+                                        <div className="border-2 border-dashed border-border-subtle rounded-xl p-8 text-center hover:border-primary hover:bg-orange-50/10 transition-colors cursor-pointer group">
+                                            <div className="w-12 h-12 rounded-full bg-orange-50 text-primary flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
                                                 <Upload size={24} />
                                             </div>
-                                            <p className="text-sm font-medium text-slate-900 mb-1">点击上传或拖拽文件</p>
-                                            <p className="text-xs text-slate-500">仅支持 Excel 或 CSV 文件</p>
+                                            <p className="text-sm font-medium text-text-primary mb-1">点击上传或拖拽文件</p>
+                                            <p className="text-xs text-text-secondary">仅支持 Excel 或 CSV 文件</p>
                                             <input type="file" className="hidden" accept=".xlsx,.xls,.csv" />
                                         </div>
                                     </div>
@@ -555,59 +546,66 @@ const CreateTask = () => {
 
                             {/* Step 2: 搜索配置 */}
                             {currentStep === 2 && (
-                                <div className="space-y-6 max-w-2xl mx-auto animate-fade-in">
-                                    <div className="grid grid-cols-3 gap-4">
+                                <div className="space-y-8 max-w-3xl mx-auto animate-fade-in">
+                                    <div className="grid grid-cols-3 gap-6">
                                         <TagInput
                                             label="行业关键词"
-                                            placeholder="按回车确认..."
+                                            required
+                                            placeholder="输入关键词按回车确认"
                                             value={idForm.industryKeywords}
                                             onChange={(val) => setIdForm({ ...idForm, industryKeywords: val })}
                                         />
                                         <TagInput
                                             label="本品关键词"
-                                            placeholder="按回车确认..."
+                                            required
+                                            placeholder="输入关键词按回车确认"
                                             value={idForm.brandKeywords}
                                             onChange={(val) => setIdForm({ ...idForm, brandKeywords: val })}
                                         />
                                         <TagInput
                                             label="竞品关键词"
-                                            placeholder="按回车确认..."
+                                            required
+                                            placeholder="输入关键词按回车确认"
                                             value={idForm.competitorKeywords}
                                             onChange={(val) => setIdForm({ ...idForm, competitorKeywords: val })}
                                         />
                                     </div>
 
-                                    <MultiSelect
-                                        label="目标国家"
-                                        required
-                                        placeholder="选择国家..."
-                                        value={idForm.targetCountries}
-                                        onChange={(val) => setIdForm({ ...idForm, targetCountries: val })}
-                                    />
-
-                                    <div className="space-y-3 pt-4">
-                                        <label className="flex items-start gap-3 cursor-pointer group">
-                                            <input
-                                                type="checkbox"
-                                                className="w-5 h-5 mt-0.5 rounded border-slate-300 text-orange-600 focus:ring-orange-500"
-                                                checked={idForm.excludeSearched}
-                                                onChange={(e) => setIdForm({ ...idForm, excludeSearched: e.target.checked })}
-                                            />
-                                            <div>
-                                                <span className="text-sm font-medium text-slate-700">排除已搜索过的红人</span>
-                                                <p className="text-xs text-slate-500 mt-0.5">不显示其他任务中已出现的红人</p>
+                                    {/* Exclusion Options */}
+                                    <div className="space-y-4 pt-2">
+                                        <label className="flex items-start gap-4 cursor-pointer group p-4 border border-border-subtle rounded-xl hover:border-primary/30 hover:bg-orange-50/20 transition-all">
+                                            <div className="relative flex items-center">
+                                                <input
+                                                    type="checkbox"
+                                                    className="peer sr-only"
+                                                    checked={idForm.excludeSearched}
+                                                    onChange={(e) => setIdForm({ ...idForm, excludeSearched: e.target.checked })}
+                                                />
+                                                <div className="w-5 h-5 border-2 border-text-tertiary rounded flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary transition-all">
+                                                    <svg className="w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                                </div>
+                                            </div>
+                                            <div className="flex-1">
+                                                <span className="text-sm font-bold text-text-primary group-hover:text-primary transition-colors">排除已搜索过的红人</span>
+                                                <p className="text-xs text-text-secondary mt-1">智能过滤掉您在其他任务中已经发现的红人。</p>
                                             </div>
                                         </label>
-                                        <label className="flex items-start gap-3 cursor-pointer group">
-                                            <input
-                                                type="checkbox"
-                                                className="w-5 h-5 mt-0.5 rounded border-slate-300 text-orange-600 focus:ring-orange-500"
-                                                checked={idForm.excludeDeduplicated}
-                                                onChange={(e) => setIdForm({ ...idForm, excludeDeduplicated: e.target.checked })}
-                                            />
-                                            <div>
-                                                <span className="text-sm font-medium text-slate-700">排除去重的红人</span>
-                                                <p className="text-xs text-slate-500 mt-0.5">避免从全局排除列表中出现红人</p>
+
+                                        <label className="flex items-start gap-4 cursor-pointer group p-4 border border-border-subtle rounded-xl hover:border-primary/30 hover:bg-orange-50/20 transition-all">
+                                            <div className="relative flex items-center">
+                                                <input
+                                                    type="checkbox"
+                                                    className="peer sr-only"
+                                                    checked={idForm.excludeDeduplicated}
+                                                    onChange={(e) => setIdForm({ ...idForm, excludeDeduplicated: e.target.checked })}
+                                                />
+                                                <div className="w-5 h-5 border-2 border-text-tertiary rounded flex items-center justify-center peer-checked:bg-primary peer-checked:border-primary transition-all">
+                                                    <svg className="w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                                </div>
+                                            </div>
+                                            <div className="flex-1">
+                                                <span className="text-sm font-bold text-text-primary group-hover:text-primary transition-colors">排除去重的红人</span>
+                                                <p className="text-xs text-text-secondary mt-1">避免从全局排除列表中出现红人。</p>
                                             </div>
                                         </label>
                                     </div>
@@ -616,30 +614,38 @@ const CreateTask = () => {
 
                             {/* Step 3: 目标画像 */}
                             {currentStep === 3 && (
-                                <div className="space-y-6 max-w-2xl mx-auto animate-fade-in">
+                                <div className="space-y-8 animate-fade-in">
                                     <div className="text-center mb-8">
-                                        <h3 className="text-lg font-bold text-slate-900">目标红人画像</h3>
-                                        <p className="text-sm text-slate-500 mt-1">定义理想的红人类型(可选)</p>
+                                        <div className="w-16 h-16 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                            <User size={32} />
+                                        </div>
+                                        <h3 className="text-xl font-bold text-text-primary">目标红人画像</h3>
+                                        <p className="text-sm text-text-secondary mt-2 max-w-md mx-auto">分析频道内容以找到最佳匹配。按类型过滤有助于提高相关性得分。</p>
                                     </div>
 
-                                    <TagInput
-                                        label="P0 频道类型 (优先)"
-                                        placeholder="例如：科技评测, 开箱视频..."
-                                        value={idForm.p0Types}
-                                        onChange={(val) => setIdForm({ ...idForm, p0Types: val })}
-                                    />
-                                    <TagInput
-                                        label="P1 频道类型 (次要)"
-                                        placeholder="例如：生活方式, DIY..."
-                                        value={idForm.p1Types}
-                                        onChange={(val) => setIdForm({ ...idForm, p1Types: val })}
-                                    />
-                                    <TagInput
-                                        label="P2 频道类型 (可接受)"
-                                        placeholder="例如：通用科技, 新闻..."
-                                        value={idForm.p2Types}
-                                        onChange={(val) => setIdForm({ ...idForm, p2Types: val })}
-                                    />
+                                    <div className="space-y-6">
+                                        <TagInput
+                                            label="P0 频道类型 (必须匹配)"
+                                            required
+                                            placeholder="例如：科技评测, 开箱视频..."
+                                            value={idForm.p0Types}
+                                            onChange={(val) => setIdForm({ ...idForm, p0Types: val })}
+                                        />
+                                        <TagInput
+                                            label="P1 频道类型 (次要匹配)"
+                                            required
+                                            placeholder="例如：生活方式, DIY..."
+                                            value={idForm.p1Types}
+                                            onChange={(val) => setIdForm({ ...idForm, p1Types: val })}
+                                        />
+                                        <TagInput
+                                            label="P2 频道类型 (可接受)"
+                                            required
+                                            placeholder="例如：通用科技, 新闻..."
+                                            value={idForm.p2Types}
+                                            onChange={(val) => setIdForm({ ...idForm, p2Types: val })}
+                                        />
+                                    </div>
                                 </div>
                             )}
                         </>
